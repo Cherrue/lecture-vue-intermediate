@@ -4,14 +4,35 @@
     <span class="addContainer" @click="addTodo">
       <i class="fa-solid fa-plus addBtn"></i>
     </span>
+
+    <Teleport to="body">
+      <!-- use the modal component, pass in the prop -->
+      <modal :show="showModal" @close="showModal = false">
+        <template #header>
+          <h3>
+            경고!
+            <i class="fa-solid fa-xmark closeModalBtn" @click="showModal = false"></i>
+          </h3>
+        </template>
+        <template #body>
+          <p>무언가를 입력하세요.</p>
+        </template>
+        <template #footer>
+          <span>copy right</span>
+        </template>
+      </modal>
+    </Teleport>
   </div>
 </template>
 
 <script>
+import Modal from "./common/ModalView"
+
 export default {
   data: function() {
     return {
-      newTodoItem: ""
+      newTodoItem: "",
+      showModal: false
     }
   },
   methods: {
@@ -19,11 +40,16 @@ export default {
       if (this.newTodoItem !== '') {
         this.$emit('addTodoItem', this.newTodoItem);
         this.clearInput();
+      } else {
+        this.showModal = !this.showModal;
       }
     },
     clearInput: function () {
       this.newTodoItem = '';
     }
+  },
+  components: {
+    Modal
   }
 }
 </script>
@@ -52,5 +78,8 @@ input:focus {
 .addBtn {
   color: white;
   vertical-align: middle;
+}
+.closeModalBtn {
+  color: #42b983;
 }
 </style>
